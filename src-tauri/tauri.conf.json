@@ -1,0 +1,46 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Backupper",
+  "version": "0.1.0",
+  "identifier": "fr.nytuo.backupper",
+  "build": {
+    "beforeDevCommand": "npm run dev:vite",
+    "beforeBuildCommand": "npm run build:vite",
+    "devUrl": "http://localhost:1420",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [
+      {
+        "title": "Backupper",
+        "width": 600,
+        "height": 800,
+        "resizable": false
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "createUpdaterArtifacts": true,
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDc1NzRCOENBNUYzNjJDODEKUldTQkxEWmZ5cmgwZFk1ZUllbGFFYTBET3NpRlh6Sng5Q2J0NWNIZnJORlVBcm0vVVBiUGhBRVEK",
+      "endpoints": [
+        "https://github.com/Nytuo/Backupper/releases/latest/download/latest.json"
+      ]
+    }
+  }
+}

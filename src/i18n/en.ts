@@ -1,0 +1,126 @@
+const en = {
+  language: {
+    label: "Language",
+  },
+  common: {
+    noFolderChosen: "No folder chosen",
+    chooseFolder: "Choose Folder…",
+    name: "Name",
+    password: "Password",
+    cancel: "Cancel",
+    remove: "Remove",
+    back: "Back",
+    save: "Save",
+    lightMode: "Switch to light mode",
+    darkMode: "Switch to dark mode",
+  },
+  home: {
+    setupButton: "Set Up a Backup",
+    resticMissingLine1:
+      "restic was not found on your system. Install it, then relaunch Backupper.",
+    resticMissingOs: {
+      macos: "macOS:",
+      linux: "Linux:",
+      windows: "Windows:",
+    },
+    repoCardSummary: "{count} folder(s) → {path}",
+  },
+  setup: {
+    title: "Set Up a Backup",
+    editTitle: "Edit Backup",
+    saveButton: "Save Changes",
+    destinationLocked:
+      "The backup destination and password cannot be changed after creation.",
+    namePlaceholder: "e.g. My Laptop",
+    sourcesLabel: "Folders to back up",
+    addFolderButton: "Add Folder…",
+    destinationLabel: "Backup destination",
+    chooseDestinationButton: "Choose Folder or External Drive…",
+    passwordLabel: "Password (optional)",
+    passwordPlaceholder: "Encryption password",
+    confirmPasswordLabel: "Confirm password",
+    confirmPasswordPlaceholder: "Repeat password",
+    passwordHint:
+      "This password encrypts your backup. If you lose it, your backup cannot be recovered. Leave blank to skip encryption (not recommended).",
+    createButton: "Create Backup",
+    errors: {
+      needName: "Give this backup a name.",
+      needSource: "Add at least one folder to back up.",
+      needDestination: "Choose a backup destination.",
+      passwordMismatch: "Passwords don't match.",
+    },
+  },
+  repo: {
+    allBackupsLink: "All Backups",
+    editButton: "Edit",
+    backupNowButton: "Back Up Now",
+    progressText: "{percent}% — {filesDone}/{totalFiles} files",
+    progressDone: "Done",
+    backupResultSuccess:
+      "Backed up {totalFiles} files, {filesNew} new, {filesChanged} changed.",
+    backupResultFailure: "Backup failed: {message}",
+    restoreButton: "Restore Files",
+    replicateButton: "Replicate to Another Location",
+  },
+  restore: {
+    title: "Restore Files",
+    loadingSnapshots: "Loading snapshots…",
+    noSnapshots: "No backups yet for this location.",
+    chooseSpecificButton: "Choose Specific Files…",
+    hideFilePickerButton: "Restore Everything Instead",
+    emptyFolder: "This folder is empty.",
+    selectionCount:
+      "{count} item(s) selected — everything else will be left out.",
+    destinationLabel: "Restore to",
+    runButton: "Restore",
+    complete: "Restore complete.",
+    failed: "Restore failed: {message}",
+  },
+  replicate: {
+    title: "Replicate to Another Location",
+    noTargets: "No replication targets yet.",
+    addButton: "Add Replication Target…",
+    replicateNowButton: "Replicate Now",
+    namePlaceholder: "e.g. NAS",
+    locationLabel: "Location",
+    passwordPlaceholder: "Encryption password for this copy",
+    passwordHint:
+      "This can be the same password or a different one — it only protects this copy.",
+    addTargetButton: "Add Target",
+    complete: "Replication complete.",
+    failed: "Replication failed: {message}",
+    errors: {
+      needName: "Give this location a name.",
+      needDestination: "Choose a folder.",
+      needPassword: "Set a password for this copy.",
+    },
+  },
+  updater: {
+    updateAvailable: "Update Available",
+    upToDate: "Up to date",
+    upToDateMessage: "You're running the latest version.",
+    downloading: "Downloading…",
+    installing: "Installing…",
+    installedRestart: "Update installed! Restart to apply.",
+    restartNow: "Restart Now",
+    updateNow: "Update Now",
+    retryUpdate: "Retry Update",
+    allReleases: "All releases",
+    later: "Later",
+    close: "Close",
+    checkForUpdates: "Check for Updates",
+  },
+  errors: {
+    restic_not_found:
+      "restic could not be found. Install it from restic.net and relaunch Backupper.",
+    wrong_password: "That password is incorrect for this backup.",
+    repo_not_found: "This backup location could not be found.",
+    replica_not_found: "This replication target could not be found.",
+    repo_locked:
+      "This backup is locked by another running operation. Try again shortly.",
+    io: "Something went wrong: {message}",
+    restic: "restic reported an error: {message}",
+  },
+};
+
+export default en;
