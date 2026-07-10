@@ -1,5 +1,6 @@
 use serde::Serialize;
 
+use crate::git_backup::GitError;
 use crate::restic::ResticError;
 
 #[derive(Debug, Serialize, Clone, PartialEq)]
@@ -10,8 +11,12 @@ pub enum AppError {
     RepoNotFound,
     ReplicaNotFound,
     RepoLocked,
+    GitNotFound,
+    GitTargetNotFound,
+    GitNoInstaller,
     Io { message: String },
     Restic { message: String },
+    Git { message: String },
 }
 
 impl std::fmt::Display for AppError {
@@ -22,7 +27,14 @@ impl std::fmt::Display for AppError {
             AppError::RepoNotFound => write!(f, "backup repository not found"),
             AppError::ReplicaNotFound => write!(f, "replication target not found"),
             AppError::RepoLocked => write!(f, "the repository is locked by another process"),
-            AppError::Io { message } | AppError::Restic { message } => write!(f, "{message}"),
+            AppError::GitNotFound => write!(f, "git was not found on your PATH"),
+            AppError::GitTargetNotFound => write!(f, "this git backup target could not be found"),
+            AppError::GitNoInstaller => {
+                write!(f, "no supported package manager was found to install git")
+            }
+            AppError::Io { message } | AppError::Restic { message } | AppError::Git { message } => {
+                write!(f, "{message}")
+            }
         }
     }
 }
@@ -35,6 +47,19 @@ impl From<ResticError> for AppError {
                 AppError::Restic { message }
             }
             ResticError::Failed(message) => classify_failed(message),
+        }
+    }
+}
+
+impl From<GitError> for AppError {
+    fn from(err: GitError) -> Self {
+        match err {
+            GitError::NotFound => AppError::GitNotFound,
+            GitError::NoInstaller => AppError::GitNoInstaller,
+            GitError::Spawn(message) | GitError::Http(message) | GitError::Parse(message) => {
+                AppError::Git { message }
+            }
+            GitError::Failed(message) => AppError::Git { message },
         }
     }
 }

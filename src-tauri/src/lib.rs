@@ -1,6 +1,7 @@
 mod commands;
 pub mod config;
 pub mod errors;
+pub mod git_backup;
 pub mod restic;
 pub mod updater;
 
@@ -65,12 +66,27 @@ pub fn run() {
             commands::list_repos,
             commands::create_repo,
             commands::update_repo,
+            commands::remove_repo,
+            commands::check_path_exists,
+            commands::import_restic_repo,
+            commands::relink_repo,
             commands::run_backup,
             commands::list_snapshots,
             commands::list_snapshot_files,
             commands::restore_snapshot,
             commands::add_replica,
             commands::run_replicate,
+            commands::detect_git,
+            commands::install_git,
+            commands::fetch_remote_repos,
+            commands::list_git_targets,
+            commands::create_git_target,
+            commands::update_git_target,
+            commands::remove_git_target,
+            commands::relink_git_target,
+            commands::run_git_backup,
+            commands::list_local_git_repos,
+            commands::restore_git_repo,
             updater::check_for_update,
             updater::install_update,
             updater::open_releases_page,

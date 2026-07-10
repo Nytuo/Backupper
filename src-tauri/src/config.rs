@@ -3,6 +3,7 @@ use tauri::{AppHandle, Manager};
 
 const KEYRING_SERVICE: &str = "com.arnaud.backupper";
 const REPOS_FILE: &str = "repos.json";
+const GIT_TARGETS_FILE: &str = "git_targets.json";
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct Replica {
@@ -29,13 +30,34 @@ pub struct Repo {
     pub encrypted: bool,
 }
 
-fn repos_file_path(app: &AppHandle) -> Result<std::path::PathBuf, String> {
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+pub struct GitTarget {
+    pub id: String,
+    pub label: String,
+    pub provider: String,
+    pub server_url: String,
+    pub username: String,
+    pub dest_path: String,
+    #[serde(default)]
+    pub selected_repos: Vec<String>,
+    pub created_at: String,
+}
+
+fn config_dir(app: &AppHandle) -> Result<std::path::PathBuf, String> {
     let dir = app
         .path()
         .app_config_dir()
         .map_err(|e| format!("could not resolve app config dir: {e}"))?;
     std::fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
-    Ok(dir.join(REPOS_FILE))
+    Ok(dir)
+}
+
+fn repos_file_path(app: &AppHandle) -> Result<std::path::PathBuf, String> {
+    Ok(config_dir(app)?.join(REPOS_FILE))
+}
+
+fn git_targets_file_path(app: &AppHandle) -> Result<std::path::PathBuf, String> {
+    Ok(config_dir(app)?.join(GIT_TARGETS_FILE))
 }
 
 fn load_repos_from_path(path: &std::path::Path) -> Result<Vec<Repo>, String> {
@@ -59,6 +81,31 @@ pub fn save_repos(app: &AppHandle, repos: &[Repo]) -> Result<(), String> {
     save_repos_to_path(&repos_file_path(app)?, repos)
 }
 
+fn load_git_targets_from_path(path: &std::path::Path) -> Result<Vec<GitTarget>, String> {
+    if !path.exists() {
+        return Ok(Vec::new());
+    }
+    let data = std::fs::read_to_string(path).map_err(|e| e.to_string())?;
+    serde_json::from_str(&data).map_err(|e| e.to_string())
+}
+
+fn save_git_targets_to_path(path: &std::path::Path, targets: &[GitTarget]) -> Result<(), String> {
+    let data = serde_json::to_string_pretty(targets).map_err(|e| e.to_string())?;
+    std::fs::write(path, data).map_err(|e| e.to_string())
+}
+
+pub fn load_git_targets(app: &AppHandle) -> Result<Vec<GitTarget>, String> {
+    load_git_targets_from_path(&git_targets_file_path(app)?)
+}
+
+pub fn save_git_targets(app: &AppHandle, targets: &[GitTarget]) -> Result<(), String> {
+    save_git_targets_to_path(&git_targets_file_path(app)?, targets)
+}
+
+pub fn git_target_keyring_account(target_id: &str) -> String {
+    format!("git-target::{target_id}")
+}
+
 pub fn set_password(account: &str, password: &str) -> Result<(), String> {
     let entry = keyring_core::Entry::new(KEYRING_SERVICE, account).map_err(|e| e.to_string())?;
     entry.set_password(password).map_err(|e| e.to_string())
@@ -67,6 +114,12 @@ pub fn set_password(account: &str, password: &str) -> Result<(), String> {
 pub fn get_password(account: &str) -> Result<String, String> {
     let entry = keyring_core::Entry::new(KEYRING_SERVICE, account).map_err(|e| e.to_string())?;
     entry.get_password().map_err(|e| e.to_string())
+}
+
+pub fn delete_password(account: &str) {
+    if let Ok(entry) = keyring_core::Entry::new(KEYRING_SERVICE, account) {
+        let _ = entry.delete_credential();
+    }
 }
 
 pub fn replica_keyring_account(repo_id: &str, replica_id: &str) -> String {

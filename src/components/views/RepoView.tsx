@@ -7,11 +7,20 @@ import {
   Loader2,
   Pencil,
   RotateCcw,
+  Trash2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
 import { useI18n } from "@/i18n";
-import { type BackupEvent, type Repo, runBackup } from "@/lib/api";
+import { type BackupEvent, removeRepo, type Repo, runBackup } from "@/lib/api";
 
 interface Props {
   repo: Repo;
@@ -19,6 +28,7 @@ interface Props {
   onGoRestore: () => void;
   onGoReplicate: () => void;
   onEdit: () => void;
+  onRemoved: (repoId: string) => void;
 }
 
 export default function RepoView({
@@ -27,12 +37,16 @@ export default function RepoView({
   onGoRestore,
   onGoReplicate,
   onEdit,
+  onRemoved,
 }: Props) {
   const { t, errorMessage } = useI18n();
   const [busy, setBusy] = useState(false);
   const [progress, setProgress] = useState<number | null>(null);
   const [progressText, setProgressText] = useState("");
   const [result, setResult] = useState<string | null>(null);
+  const [confirmRemove, setConfirmRemove] = useState(false);
+  const [removing, setRemoving] = useState(false);
+  const [removeError, setRemoveError] = useState("");
 
   useEffect(() => {
     const unlisten = listen<BackupEvent>("backup-event", (event) => {
@@ -77,6 +91,18 @@ export default function RepoView({
     }
   }
 
+  async function confirmRemoveRepo() {
+    setRemoving(true);
+    setRemoveError("");
+    try {
+      await removeRepo(repo.id);
+      onRemoved(repo.id);
+    } catch (err) {
+      setRemoveError(errorMessage(err));
+      setRemoving(false);
+    }
+  }
+
   return (
     <div className="flex flex-col gap-5">
       <button
@@ -96,17 +122,65 @@ export default function RepoView({
             {repo.repo_path}
           </p>
         </div>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={onEdit}
-          data-testid="btn-edit-repo"
-          className="shrink-0 gap-1.5"
-        >
-          <Pencil className="size-3.5" />
-          {t("repo.editButton")}
-        </Button>
+        <div className="flex shrink-0 gap-1">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onEdit}
+            data-testid="btn-edit-repo"
+            className="gap-1.5"
+          >
+            <Pencil className="size-3.5" />
+            {t("repo.editButton")}
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              setRemoveError("");
+              setConfirmRemove(true);
+            }}
+            data-testid="btn-remove-repo"
+            className="text-destructive hover:text-destructive gap-1.5"
+          >
+            <Trash2 className="size-3.5" />
+            {t("repo.removeButton")}
+          </Button>
+        </div>
       </div>
+
+      <Dialog open={confirmRemove} onOpenChange={setConfirmRemove}>
+        <DialogContent data-testid="remove-repo-dialog">
+          <DialogHeader>
+            <DialogTitle>{t("repo.removeConfirmTitle")}</DialogTitle>
+            <DialogDescription>
+              {t("repo.removeConfirmDescription")}
+            </DialogDescription>
+          </DialogHeader>
+          {removeError && (
+            <p className="text-destructive text-sm">{removeError}</p>
+          )}
+          <DialogFooter>
+            <Button
+              variant="ghost"
+              onClick={() => setConfirmRemove(false)}
+              disabled={removing}
+            >
+              {t("common.cancel")}
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={confirmRemoveRepo}
+              disabled={removing}
+              data-testid="btn-confirm-remove-repo"
+              className="gap-2"
+            >
+              {removing && <Loader2 className="size-4 animate-spin" />}
+              {t("repo.removeButton")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Button
         onClick={backupNow}

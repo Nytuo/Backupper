@@ -24,6 +24,12 @@ const fr = {
       windows: "Windows :",
     },
     repoCardSummary: "{count} dossier(s) → {path}",
+    setupGitButton: "Sauvegarder un hébergeur Git",
+    gitTargetCardSummary: "{provider} → {path}",
+    importButton: "Importer une sauvegarde existante…",
+    locationMissing:
+      "Emplacement introuvable — le disque est peut-être débranché, ou sa lettre, son nom ou son point de montage a changé.",
+    locateButton: "Localiser…",
   },
   setup: {
     title: "Configurer une sauvegarde",
@@ -61,6 +67,10 @@ const fr = {
     backupResultFailure: "Échec de la sauvegarde : {message}",
     restoreButton: "Restaurer des fichiers",
     replicateButton: "Répliquer vers un autre emplacement",
+    removeButton: "Retirer",
+    removeConfirmTitle: "Retirer cette sauvegarde ?",
+    removeConfirmDescription:
+      "Cela la retire uniquement de la liste de Backupper. Le dossier de sauvegarde et son contenu restent intacts sur le disque.",
   },
   restore: {
     title: "Restaurer des fichiers",
@@ -94,6 +104,86 @@ const fr = {
       needPassword: "Définissez un mot de passe pour cette copie.",
     },
   },
+  gitSetup: {
+    title: "Sauvegarder un hébergeur Git",
+    gitMissing:
+      "git est introuvable sur ce système. Installez-le pour sauvegarder des dépôts.",
+    installGitButton: "Installer Git",
+    namePlaceholder: "p. ex. Mon compte GitHub",
+    providerLabel: "Fournisseur",
+    providers: {
+      github: "GitHub",
+      gitlab: "GitLab",
+      forgejo: "Forgejo / Gitea",
+    },
+    serverLabel: "URL du serveur",
+    usernameLabel: "Nom d'utilisateur",
+    usernamePlaceholder: "Votre nom d'utilisateur",
+    tokenLabel: "Jeton d'accès",
+    tokenPlaceholder: "Jeton d'accès personnel",
+    tokenHint:
+      "Créez un jeton avec accès en lecture aux dépôts sur votre hébergeur Git. Il est stocké de façon sécurisée dans le trousseau système.",
+    fetchButton: "Récupérer les dépôts",
+    repoCount: "{count} dépôt(s) trouvé(s)",
+    selectionCount: "{count} sélectionné(s)",
+    privateLabel: "Privé",
+    destinationLabel: "Destination de la sauvegarde",
+    createButton: "Créer la sauvegarde",
+    errors: {
+      needName: "Donnez un nom à cette sauvegarde.",
+      needCredentials: "Entrez un nom d'utilisateur et un jeton d'accès.",
+      needServerUrl: "Entrez l'URL du serveur pour cet hébergeur.",
+      needFetch: "Récupérez les dépôts avant de continuer.",
+      needSelection: "Sélectionnez au moins un dépôt.",
+      needDestination: "Choisissez une destination de sauvegarde.",
+    },
+  },
+  gitTarget: {
+    summary: "{provider} → {path}",
+    backupNowButton: "Sauvegarder maintenant",
+    progressIdle: "Pas encore sauvegardé.",
+    progressRunning: "{current}/{total} — sauvegarde de {repo}…",
+    progressSuccess: "{current}/{total} — {repo} terminé",
+    progressFailed: "{current}/{total} — {repo} en échec",
+    backupResultSuccess: "{succeeded}/{total} dépôts sauvegardés.",
+    backupResultPartial:
+      "{succeeded}/{total} dépôts sauvegardés. Échecs : {failures}",
+    backupResultFailure: "Échec de la sauvegarde : {message}",
+    advancedToggle: "Avancé : afficher la sortie des commandes",
+    advancedEmpty:
+      "Aucune sortie pour l'instant. Lancez une sauvegarde pour voir la sortie brute de git ici.",
+    restoreButton: "Restaurer un dépôt",
+    removeButton: "Retirer",
+    removeConfirmTitle: "Retirer cette sauvegarde ?",
+    removeConfirmDescription:
+      "Cela la retire uniquement de la liste de Backupper. Les dépôts miroirs et leur contenu restent intacts sur le disque.",
+  },
+  import: {
+    title: "Importer une sauvegarde existante",
+    description:
+      "Pointez Backupper vers une sauvegarde restic déjà présente sur le disque — par exemple faite sur un autre ordinateur, ou trouvée sur un disque reconnecté — sans l'effacer.",
+    namePlaceholder: "p. ex. Sauvegarde ancien ordinateur",
+    sourceLabel: "Dossier de la sauvegarde",
+    chooseSourceButton: "Choisir un dossier ou un disque externe…",
+    passwordPlaceholder: "Mot de passe de chiffrement",
+    importButton: "Importer",
+    errors: {
+      needName: "Donnez un nom à cette sauvegarde.",
+      needSource: "Choisissez le dossier contenant la sauvegarde.",
+      wrongPassword:
+        "Ce mot de passe est incorrect. Entrez le bon mot de passe et réessayez.",
+      notARepo: "Ce dossier ne ressemble pas à une sauvegarde restic.",
+    },
+  },
+  gitRestore: {
+    title: "Restaurer un dépôt",
+    loading: "Chargement des dépôts locaux…",
+    noMirrors: "Aucun dépôt sauvegardé pour cet emplacement.",
+    destinationLabel: "Restaurer vers",
+    runButton: "Restaurer",
+    complete: "Restauration terminée.",
+    failed: "Échec de la restauration : {message}",
+  },
   updater: {
     updateAvailable: "Mise à jour disponible",
     upToDate: "À jour",
@@ -117,8 +207,14 @@ const fr = {
     replica_not_found: "Cette cible de réplication est introuvable.",
     repo_locked:
       "Cette sauvegarde est verrouillée par une autre opération en cours. Réessayez dans un instant.",
+    git_not_found:
+      "git est introuvable. Installez-le puis relancez Backupper.",
+    git_target_not_found: "Cette cible de sauvegarde Git est introuvable.",
+    git_no_installer:
+      "Aucun gestionnaire de paquets pris en charge n'a été trouvé pour installer git automatiquement. Veuillez l'installer manuellement.",
     io: "Une erreur est survenue : {message}",
     restic: "restic a signalé une erreur : {message}",
+    git: "git a signalé une erreur : {message}",
   },
 };
 

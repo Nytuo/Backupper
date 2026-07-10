@@ -71,6 +71,29 @@ export function updateRepo(args: {
   return invoke("update_repo", args);
 }
 
+export function removeRepo(repoId: string): Promise<void> {
+  return invoke("remove_repo", { repoId });
+}
+
+export function checkPathExists(path: string): Promise<boolean> {
+  return invoke("check_path_exists", { path });
+}
+
+export function importResticRepo(args: {
+  label: string;
+  repoPath: string;
+  password: string | null;
+}): Promise<Repo> {
+  return invoke("import_restic_repo", args);
+}
+
+export function relinkRepo(args: {
+  repoId: string;
+  newRepoPath: string;
+}): Promise<Repo> {
+  return invoke("relink_repo", args);
+}
+
 export function runBackup(repoId: string): Promise<BackupSummary> {
   return invoke("run_backup", { repoId });
 }
@@ -115,4 +138,115 @@ export function runReplicate(args: {
 export async function pickFolder(): Promise<string | null> {
   const selected = await open({ directory: true, multiple: false });
   return typeof selected === "string" ? selected : null;
+}
+
+export type GitProvider = "github" | "gitlab" | "forgejo";
+
+export interface GitTarget {
+  id: string;
+  label: string;
+  provider: GitProvider;
+  server_url: string;
+  username: string;
+  dest_path: string;
+  selected_repos: string[];
+  created_at: string;
+}
+
+export interface RemoteRepo {
+  owner: string;
+  name: string;
+  full_name: string;
+  clone_url: string;
+  private: boolean;
+}
+
+export interface LocalMirror {
+  provider: string;
+  owner: string;
+  name: string;
+  full_name: string;
+  path: string;
+}
+
+export interface GitBackupSummary {
+  repos_total: number;
+  repos_succeeded: number;
+  failures: string[];
+}
+
+export interface GitBackupProgress {
+  current: number;
+  total: number;
+  full_name: string;
+  status: "running" | "success" | "failed";
+  message?: string;
+}
+
+export function detectGit(): Promise<string> {
+  return invoke("detect_git");
+}
+
+export function installGit(): Promise<void> {
+  return invoke("install_git");
+}
+
+export function fetchRemoteRepos(args: {
+  provider: GitProvider;
+  serverUrl: string;
+  username: string;
+  token: string;
+}): Promise<RemoteRepo[]> {
+  return invoke("fetch_remote_repos", args);
+}
+
+export function listGitTargets(): Promise<GitTarget[]> {
+  return invoke("list_git_targets");
+}
+
+export function createGitTarget(args: {
+  label: string;
+  provider: GitProvider;
+  serverUrl: string;
+  username: string;
+  token: string;
+  destPath: string;
+  selectedRepos: string[];
+}): Promise<GitTarget> {
+  return invoke("create_git_target", args);
+}
+
+export function updateGitTarget(args: {
+  targetId: string;
+  label: string;
+  selectedRepos: string[];
+}): Promise<GitTarget> {
+  return invoke("update_git_target", args);
+}
+
+export function removeGitTarget(targetId: string): Promise<void> {
+  return invoke("remove_git_target", { targetId });
+}
+
+export function relinkGitTarget(args: {
+  targetId: string;
+  newDestPath: string;
+}): Promise<GitTarget> {
+  return invoke("relink_git_target", args);
+}
+
+export function runGitBackup(targetId: string): Promise<GitBackupSummary> {
+  return invoke("run_git_backup", { targetId });
+}
+
+export function listLocalGitRepos(targetId: string): Promise<LocalMirror[]> {
+  return invoke("list_local_git_repos", { targetId });
+}
+
+export function restoreGitRepo(args: {
+  targetId: string;
+  barePath: string;
+  targetPath: string;
+}): Promise<void> {
+  return invoke("restore_git_repo", args);
 }

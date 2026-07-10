@@ -24,6 +24,12 @@ const en = {
       windows: "Windows:",
     },
     repoCardSummary: "{count} folder(s) → {path}",
+    setupGitButton: "Back Up a Git Host",
+    gitTargetCardSummary: "{provider} → {path}",
+    importButton: "Import Existing Backup…",
+    locationMissing:
+      "Location not found — the drive may be disconnected, or its letter, name, or mount point changed.",
+    locateButton: "Locate…",
   },
   setup: {
     title: "Set Up a Backup",
@@ -61,6 +67,10 @@ const en = {
     backupResultFailure: "Backup failed: {message}",
     restoreButton: "Restore Files",
     replicateButton: "Replicate to Another Location",
+    removeButton: "Remove",
+    removeConfirmTitle: "Remove this backup?",
+    removeConfirmDescription:
+      "This only removes it from Backupper's list. The backup folder and its contents are left untouched on disk.",
   },
   restore: {
     title: "Restore Files",
@@ -95,6 +105,84 @@ const en = {
       needPassword: "Set a password for this copy.",
     },
   },
+  gitSetup: {
+    title: "Back Up a Git Host",
+    gitMissing:
+      "git was not found on your system. Install it to back up repositories.",
+    installGitButton: "Install Git",
+    namePlaceholder: "e.g. My GitHub Account",
+    providerLabel: "Provider",
+    providers: {
+      github: "GitHub",
+      gitlab: "GitLab",
+      forgejo: "Forgejo / Gitea",
+    },
+    serverLabel: "Server URL",
+    usernameLabel: "Username",
+    usernamePlaceholder: "Your account username",
+    tokenLabel: "Access Token",
+    tokenPlaceholder: "Personal access token",
+    tokenHint:
+      "Create a token with repository read access on your Git host. It is stored securely in your system keychain.",
+    fetchButton: "Fetch Repositories",
+    repoCount: "{count} repositor(y/ies) found",
+    selectionCount: "{count} selected",
+    privateLabel: "Private",
+    destinationLabel: "Backup destination",
+    createButton: "Create Backup",
+    errors: {
+      needName: "Give this backup a name.",
+      needCredentials: "Enter a username and access token.",
+      needServerUrl: "Enter the server URL for this host.",
+      needFetch: "Fetch repositories before continuing.",
+      needSelection: "Select at least one repository.",
+      needDestination: "Choose a backup destination.",
+    },
+  },
+  gitTarget: {
+    summary: "{provider} → {path}",
+    backupNowButton: "Back Up Now",
+    progressIdle: "Not backed up yet.",
+    progressRunning: "{current}/{total} — backing up {repo}…",
+    progressSuccess: "{current}/{total} — {repo} done",
+    progressFailed: "{current}/{total} — {repo} failed",
+    backupResultSuccess: "Backed up {succeeded}/{total} repositories.",
+    backupResultPartial:
+      "Backed up {succeeded}/{total} repositories. Failures: {failures}",
+    backupResultFailure: "Backup failed: {message}",
+    advancedToggle: "Advanced: show command output",
+    advancedEmpty: "No output yet. Run a backup to see the raw git output here.",
+    restoreButton: "Restore a Repository",
+    removeButton: "Remove",
+    removeConfirmTitle: "Remove this backup?",
+    removeConfirmDescription:
+      "This only removes it from Backupper's list. The mirrored repositories and their contents are left untouched on disk.",
+  },
+  import: {
+    title: "Import Existing Backup",
+    description:
+      "Point Backupper at a restic backup that already exists on disk — e.g. one made on another computer, or found on a reconnected drive — without erasing it.",
+    namePlaceholder: "e.g. Old Laptop Backup",
+    sourceLabel: "Backup folder",
+    chooseSourceButton: "Choose Folder or External Drive…",
+    passwordPlaceholder: "Encryption password",
+    importButton: "Import",
+    errors: {
+      needName: "Give this backup a name.",
+      needSource: "Choose the folder that contains the backup.",
+      wrongPassword: "That password is incorrect. Enter the correct one and try again.",
+      notARepo: "This folder doesn't look like a restic backup.",
+    },
+  },
+  gitRestore: {
+    title: "Restore a Repository",
+    loading: "Loading local repositories…",
+    noMirrors: "No repositories backed up yet for this location.",
+    destinationLabel: "Restore into",
+    runButton: "Restore",
+    complete: "Restore complete.",
+    failed: "Restore failed: {message}",
+  },
   updater: {
     updateAvailable: "Update Available",
     upToDate: "Up to date",
@@ -118,8 +206,14 @@ const en = {
     replica_not_found: "This replication target could not be found.",
     repo_locked:
       "This backup is locked by another running operation. Try again shortly.",
+    git_not_found:
+      "git could not be found. Install it and relaunch Backupper.",
+    git_target_not_found: "This git backup target could not be found.",
+    git_no_installer:
+      "No supported package manager was found to install git automatically. Please install it manually.",
     io: "Something went wrong: {message}",
     restic: "restic reported an error: {message}",
+    git: "git reported an error: {message}",
   },
 };
 
